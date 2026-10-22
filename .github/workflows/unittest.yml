@@ -2,16 +2,19 @@ name: Python Unittests with Coverage
 
 on: [pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Check out repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11.x'
       
@@ -34,5 +37,22 @@ jobs:
 
     - name: Run unittests with coverage
       run: |
-        coverage run -m unittest discover
+        python - <<'PY'
+        import socket
+        import unittest
+        import requests
+        from unittest.mock import patch
+        from coverage import Coverage
+        coverage = Coverage()
+        coverage.start()
+        with patch("dotenv.load_dotenv"), patch("pymongo.MongoClient"), \
+             patch("requests.sessions.Session.request",
+                   side_effect=requests.exceptions.ConnectionError("isolated test transport")), \
+             patch.object(socket.socket, "connect", side_effect=AssertionError("network disabled")):
+            suite = unittest.defaultTestLoader.discover(".")
+            result = unittest.TextTestRunner(verbosity=2).run(suite)
+        coverage.stop()
+        coverage.save()
+        raise SystemExit(not result.wasSuccessful())
+        PY
         coverage report -m

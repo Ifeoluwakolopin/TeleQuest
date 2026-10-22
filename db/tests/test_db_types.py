@@ -20,7 +20,7 @@ class TestDbTypes(unittest.TestCase):
         group_chat: GroupChat = GroupChat(
             chat_id=12345,
             group_name="Test Group",
-            categories=["category1", "category2"]
+            categories=["category1", "category2"],
             # 'messages' field is omitted
         )
         self.assertIsInstance(group_chat, dict)

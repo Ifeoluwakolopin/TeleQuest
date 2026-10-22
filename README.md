@@ -1,5 +1,34 @@
 # TeleQuest
 
+## Dependency maintenance
+
+Use Python 3.11 and Node 22.15+ (22 LTS in CI). Install the frontend with
+`cd web && npm ci`; start/build/test/eject remain Create React App commands.
+React 18, SVG/assets, Tailwind and the existing website are retained. Scoped
+CRA overrides update the SVG, CSS minimizer, URL/source-map and optional
+Workbox plugins, not the application framework.
+`npm start` delegates to CRA through a webpack-dev-server 5 adapter retaining
+HTTPS, source maps, custom proxy setup, SPA fallback and no-op service-worker
+middleware. Host checks default to `auto` and wildcard development-asset CORS
+is removed; the explicit legacy `DANGEROUSLY_DISABLE_HOST_CHECK` escape hatch
+remains. Scoped proxy/UUID/Underscore parents and selector-parser are refreshed
+without replacing Jest or disabling existing testing infrastructure.
+
+Keep `requirements.txt` and `mypy-requirements.txt` identical. The security
+refresh retains OpenAI/Pinecone APIs and the Telegram 20.x callback contract;
+Telegram 20.8 and HTTPX 0.26 permit patched HTTPcore/h11 without an unrelated
+async rewrite. CI runs on ephemeral GitHub-hosted runners, never the shared
+self-hosted machine, and does not deploy or publish. Black comes from the
+pinned requirements rather than a vulnerable CI-only downgrade.
+
+Run `npm audit` with development dependencies and audit the complete installed
+Python environment. Remaining CRA upstream advisories, including unpatched
+braces, remain unresolved, not dismissed. Patched webpack-dev-server removes
+node-forge via its maintained certificate generator; NYC's compatible YAML 4
+loader removes the sprintf-js path. Frontend
+compatibility builds preserve CRA's local warning behavior (`CI=false`);
+the old template test is not represented as passing.
+
 TeleQuest aims to provide an intuitive and user-friendly Telegram bot to meet your specific needs. Alongside the bot, we also have a website that offers comprehensive details about the bot and provides a direct link to start using it.
 
 ## Table of Contents
