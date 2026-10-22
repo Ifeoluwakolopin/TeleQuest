@@ -1,6 +1,6 @@
 # Use a multi-stage build to build the frontend
 # Stage 1: Build the frontend
-FROM node:16 as frontend-builder
+FROM node:22 AS frontend-builder
 WORKDIR /app
 
 # Copy the frontend application to /app
@@ -8,7 +8,7 @@ COPY web/ /app/web/
 
 # Install dependencies and build your application
 WORKDIR /app/web
-RUN npm install
+RUN npm ci
 RUN npm run build
 
 # Stage 2: Set up the Python environment

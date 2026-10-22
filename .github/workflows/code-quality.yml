@@ -2,18 +2,20 @@ name: Mypy Checks, Black Formatting and Pylint Checks
 
 on: [pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Checks
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: 3.11.x
     - run: pip install --upgrade pip
     - run: pip install -r mypy-requirements.txt
-    - run: pip install "black<23"
     - run: black --diff --check $(git ls-files '*.py')
     - run: mypy $(git ls-files '*.py')
