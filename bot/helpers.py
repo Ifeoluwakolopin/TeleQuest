@@ -3,7 +3,6 @@ from telegram import Bot
 from typing import Any
 from .messages import messages
 
-
 BOT_COMMANDS = ["/q", "/help"]
 
 
